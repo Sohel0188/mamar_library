@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_title %}
+  Library management System
+{% endblock %}
+
+{% block content %}
+  {% if messages %}
+    <ul class="messages" style="color:black">
+      {% for message in messages %}
+        <li class="{% if message.tags %}{{ message.tags }}{% endif %}" style="color: #2A4365;">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <div class="container-fluid mx-auto flex flex-col md:flex-row items-center my-6 md:my-12">
+    <div class="flex flex-col w-full lg:w-1/2 justify-center items-start pt-2 pb-5 px-6 bg-white rounded-2xl bg-opacity-70 mx-3">
+      <h1 class="font-bold text-4xl my-3">Welcome to Mamar Library</h1>
+      <p class="leading-normal mb-3" style="text-align:justify;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, officiis debitis necessitatibus eum repellendus aut beatae nisi maiores, cupiditate eligendi blanditiis consequuntur? Maxime, vitae in repellat reiciendis eaque illo. Repudiandae quis voluptas nihil ad alias! Fugiat nihil repudiandae incidunt expedita, suscipit nostrum voluptas. Impedit animi autem iste nesciunt culpa vel, obcaecati enim tenetur aut esse quis, omnis architecto porro suscipit rerum corporis voluptatum similique consequatur mollitia velit quo. Omnis saepe officiis exercitationem quisquam architecto facere incidunt magnam blanditiis repellat deserunt ea maxime accusamus, excepturi ipsa aliquam? Natus temporibus et beatae, ipsum quos possimus! Illum, fugiat temporibus? Alias, harum. Non, officiis.</p>
+      <div class="flex justify-end w-full">
+        <a href="{% url 'register' %}" class="bg-blue-900 text-white rounded-none hover:bg-black hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Register</a>
+      </div>
+    </div>
+    <div class="w-full lg:w-1/2 lg:py-6 text-center">
+      {% comment %} <img class="rounded-2xl" src="{% static 'amarlibrary.jpeg' %}" /> {% endcomment %}
+      <img src="{% static 'Library.jpg' %}" class="d-block w-100" alt="image" style="border-radius: 10px; height: 450px;" />
+    </div>
+  </div>
+  {% comment %}test{% endcomment %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card p-3">
+         <h5 style=" text-align: center; background-color: #2A4365; color: white; border-radius: 5px; padding: 5px;"> Filter By Category </h5>
+          <ol style="list-style-type: square; border-bottom:1px solid #f1f1f1 ">
+            <li style=""><b><a style="color:#2A4365;" class="" href="{% url 'home' %}"> All Book </a></b></li>
+          </ol>
+          {% for category in categories %}
+           
+              <ol style="list-style-type: square; border-bottom: 1px solid #f1f1f2;">
+                <li > <b> <a style="color:#2A4365;" href="{% url 'category_wise_book' category.slug %}">{{ category.name }}</a></b></li>
+              </ol>
+            
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-md-9">
+        <h5 style=" text-align: center;padding: 5px; border-radius: 5px; background-color: #2A4365; color: #f1f1f1;">Total Book : {{ total_books }}</h5>
+        <div class="row">
+          
+          {% for book in books %}
+            <div class="col-md-4 p-3">
+              <div class="card">
+                <img src="{{ book.image.url }}" style="height: 200px;" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <h5 style="color:#2A4365;" class="card-title">{{ book.title }}</h5>
+                  <p class="card-text">{{ book.description|truncatewords:10 }}</p>
+                  <p class="card-text"> <b>Category</b> : {{ book.category.name }}</p>
+                  <p class="card-text"> <b>Price</b> : {{ book.price }} BDT</p>
+                  {% if request.user.is_authenticated %}
+                    <a href="{% url 'detail_post' book.id %}" class="btn btn-primary text-light">View Details</a>
+                    <a href="{% url 'buy_book' book.id %}" class="btn btn-warning text-dark">Buy Now</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment %}test{% endcomment %}
+{% endblock %}

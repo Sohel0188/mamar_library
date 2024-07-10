@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container pt-5">
+<div class="col-12 p-3">
+    <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-md-6 p-3">
+            <img src="{{book.image.url}}" style="width: -webkit-fill-available;height: 400px;" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-6">
+            <div class="card-body">
+                <h5 class="card-title">{{book.title}}</h5>
+                <p class="card-text">{{book.description}}</p>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"> Category : {{book.category.name}}</li>
+                <li class="list-group-item">Price : {{book.price}} BDT </li>
+              </ul>
+              <a href="{% url 'buy_book' book.id %}" class="btn btn-warning text-light ms-2 mb-2"> Buy Now </a>
+          </div>
+        </div>
+      </div>
+</div>
+
+<div class="card m-2">
+    <h5 class="p-3">Total Comments : {{comments | length}}</h5>
+    {% for comment in comments %}
+  <div class="card-body border m-2">
+        <p><b>{{comment.name}}</b> {{comment.created_on}}</p>
+        <p>{{comment.body}}</p>
+    </div>
+    {% endfor %}
+</div>
+{% if review_permission %}
+<div class="card m-2">
+    <div class="card-body">
+        <form method="post">
+            <h1>Add Comment</h1>
+            {% csrf_token %}
+            {{comment_form | crispy}}
+
+            <button class="btn btn-warning">Submit</button>
+    </div>
+</div>
+</div>
+{% endif %}
+{% endblock %}
